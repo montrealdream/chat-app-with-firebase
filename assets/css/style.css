@@ -1,0 +1,451 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    --font-main: "Be Vietnam Pro", serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0px;
+    font-family: var(--font-main);
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* chatbox */
+.chatbox {
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: black;
+    padding: 40px 0px 40px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 375px;
+
+    position: relative;
+}
+
+.chatbox .chatbox__background {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.chatbox .chatbox__title  {
+    position: relative;
+    z-index: 999;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 20px;
+    margin-bottom: 38px;
+}
+
+.chatbox .chatbox__title-main {
+    margin: 0px; /* reset margin của thẻ h1 */
+    color: #FFFFFF;
+    font-size: 48px;
+    font-weight: 400;
+    margin-bottom: 16px;
+}
+
+.chatbox .chatbox__title-main:hover {
+    transition: 1s;
+    color: #A48DA8;
+}
+
+.chatbox .chatbox__title-sub {
+    margin: 0px; /* reset margin của thẻ p */
+    color: #B9C1BE;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.chatbox .chatbox__sign-up-email {
+    width: 327px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 16px 0px;
+    border-radius: 16px;
+    margin-bottom: 46px;
+
+    background-color: #FFFFFF;
+    color: #000E08;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.chatbox .chatbox__social-login {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.chatbox .chatbox__social-login a {
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+/* hết chatbox */
+
+/* khối social */
+.social {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    z-index: 999;
+}
+
+.social-item {
+    cursor: pointer;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid #FFFFFF;
+}
+
+.social-or {
+    display: inline-flex;
+    align-items: center;
+    margin: 30px 0px;
+    color: #D6E4E0;
+}
+
+.social-or::before {
+    content: "";
+    display: inline-block;
+    width: 132px;
+    height: 0px;
+    border: 1px solid #D6E4E0;
+    margin-right: 15px;
+}
+
+.social-or::after {
+    content: "";
+    display: inline-block;
+    width: 132px;
+    height: 0px;
+    border: 1px solid #D6E4E0;
+    margin-left: 15px;
+}
+/* hết khối social */
+
+/* login */
+.login {
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: black;
+    padding: 80px 24px 40px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+
+    position: relative;
+}
+
+.login .login__background {
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.login__background img {
+    width: 100%;
+}
+
+.login .login__title {
+    position: relative;
+    z-index: 999;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 20px;
+    margin-bottom: 38px;
+}
+
+.login .login__title-main {
+    margin: 0px; /* reset margin của thẻ h1 */
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.login .login__title-main:hover {
+    transition: 1s;
+    color: #A48DA8;
+}
+
+.login .login__title-sub {
+    margin: 0px; /* reset margin của thẻ p */
+    color: #B9C1BE;
+    font-size: 14px;
+    font-weight: 450;
+}
+
+.login .social {
+    position: relative;
+    z-index: 999;
+}
+
+.login .social-or {
+    position: relative;
+    z-index: 999;
+}
+
+.login .login__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    position: relative;
+    z-index: 999;
+}
+
+.login .login__form-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom: 1px solid #CDD1D0;
+    position: relative;
+}
+
+.login .login__form-item label {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.login .login__form-item input {
+    border: 0px;
+    outline: none;
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+.login .login__form-item .password-icon {   
+    cursor: pointer;
+    position: absolute;
+    color: #FFFFFF;
+    font-size: 15px;
+    right: 9px;
+    top: 20px;
+}
+
+.login .login__form button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 12px 0px;
+    border-radius: 10px;
+    
+    background-color: #FFFFFF;
+    color: #000E08;
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.login .login__form button:hover {
+    transition: 1s;
+    background-color: #D6CCD8;
+}
+/* hết login */
+
+/* forgot password */
+.forgot-password {
+    margin-top: 20px;
+}
+.forgot-password a {
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+/* hết forgot password */
+
+/* chat */
+.chat {
+    /* padding: 40px 20px; */
+    padding: 10px;
+    border: 1px solid #DDDDDD;
+    border-radius: 12px;
+    width: 400px;
+}
+
+.chat .chat__header {
+    padding: 0px 0px 10px 0px;
+    display: flex;
+    gap: 5px;
+    border-bottom: 1px solid #DDDDDD;
+}
+
+.chat .chat__header-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+.chat .chat__header-image {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.chat .chat__header-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.chat .chat__body {
+    padding: 10px 0px;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.chat .chat__body .chat__outgoing {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.chat .chat__outgoing, .chat .chat__incomming {
+    margin-bottom: 20px;
+}
+
+.chat .chat__body .chat__outgoing-content {
+    padding: 12px;
+    border-radius: 10px 0px 10px 10px;
+    background-color: #20A090;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 450;
+}
+
+.chat .chat__body .chat__outgoing-time {
+    position: absolute;
+    right: 7px;
+    bottom: -16px;
+    color: #797C7B;
+    font-size: 10px;
+    font-weight: 450;
+}
+
+.chat .chat__body .chat__incomming {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+}
+
+.chat .chat__body .chat__incomming-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.chat .chat__body .chat__incomming-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.chat .chat__body .chat__incomming-userName {
+    color: #000E08;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.chat .chat__body .chat__incomming-content {
+    background-color: #F2F7FB;
+    color: #000E08;
+    font-size: 12px;
+    font-weight: 450;
+    padding: 12px;
+    border-radius: 0px 10px 10px 10px;
+}
+
+.chat .chat__body .chat__incomming-time {
+    color: #797C7B;
+    font-size: 10px;
+    font-weight: 450;
+    position: absolute;
+    left: 50px;
+    top: 62px;
+}
+
+.chat__footer {
+    border-top: 1px solid #DDDDDD;
+    padding-top: 10px;
+    position: relative;
+}
+
+.chat__footer .chat__footer-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat__footer .chat__footer-form-input {
+    border: 0;
+    outline: none;
+    padding: 14px;
+    border-radius: 12px;
+    flex: 1;
+    background-color: #F3F6F6;
+    font-size: 12px;
+}
+
+.chat__footer .chat__footer-form-coppy {
+    cursor: pointer;
+    position: absolute;
+    right: 85px;
+    color: #797C7B;
+    font-size: 18px;
+}
+
+.chat__footer .chat__footer-form-icon {
+    cursor: pointer;
+    color: #000E08;
+    font-size: 18px;
+}
+
+.chat__footer .chat__footer-form button {
+    cursor: pointer;
+    border: 0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #20A090;
+    color: white;
+}
+/* hết chat */
+

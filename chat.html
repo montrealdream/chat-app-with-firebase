@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- aos js-->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- css -->
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <!-- title -->
+    <title>Chat</title>
+</head>
+<body>
+    <div class="center">
+        <div class="chat">
+            <!-- header -->
+            <div class="chat__header">
+                <div class="chat__header-image">
+                    <img src="./assets/images/user.png" alt="user">
+                </div>
+                <div class="chat__header-title">Giang Trường</div>
+
+                <!-- setting info -->
+                <div class="chat__header-infor">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+            </div>
+            <!-- body -->
+            <div class="chat__body">
+                <div class="chat__outgoing">
+                    <div class="chat__outgoing-content">
+                        Hello! Jhon abraham
+                    </div>
+                    <div class="chat__outgoing-time">
+                        09:25 AM
+                    </div>
+                </div>
+                <div class="chat__incomming">
+                    <div class="chat__incomming-avatar">
+                        <img src="./assets/images/user.png" alt="user">
+                    </div>
+                    <div class="chat__incomming-main">
+                        <div class="chat__incomming-userName">
+                            Giang Trường
+                        </div>
+                        <div class="chat__incomming-content">
+                            Have a great working week!!
+                        </div>
+                    </div>
+                    <div class="chat__incomming-time">
+                        09:25 AM
+                    </div>
+                </div>
+            </div>
+            <!-- footer -->
+            <div class="chat__footer">
+                <div class="chat__footer-form">
+                    <input 
+                        class="chat__footer-form-input"
+                        placeholder="Write your message"
+                    >
+                    </input>
+                    <div class="chat__footer-form-coppy">
+                        <i class="fa-regular fa-copy"></i>
+                    </div>
+                    <span class="chat__footer-form-icon">
+                        <i class="fa-regular fa-face-smile"></i>
+                    </span>
+                    <button type="submit">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- aos js -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- js -->
+    <script src="./assets/js/script.js"></script>
+</body>
+</html>

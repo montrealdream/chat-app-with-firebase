@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebas
 
 import { getDatabase, ref, push, set, onValue, remove, update  }from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -165,9 +165,43 @@ if(loginForm) {
 }
 // hết tính năng đăng nhập
 
+// đăng nhập với google
+const loginWithGoolge = document.querySelector('[login-with-google]');
+if(loginWithGoolge) {
+    const provider = new GoogleAuthProvider(); // google provider
+    
+    loginWithGoolge.addEventListener('click', event => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                const user = result.user;
+                console.log(user);
+                // // Lưu vào database real time
+                set(ref(db, 'users/' + user.uid), {
+                    fullName: user.displayName,
+                    avatar: user.photoURL //avatar từ google
+                })
+                    .then(() => {
+                        // chyển hướng sang trang chat
+                        window.location.href = 'chat.html';
+                })
+            }).catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                // ...
+            });
+    });
+}
+// hết đăng nhập với google
+
 // tính năng đăng xuất
 const logout = document.querySelector('[logout]');
-console.log(logout)
 if(logout) {
     logout.addEventListener('click', event => {
         signOut(auth)

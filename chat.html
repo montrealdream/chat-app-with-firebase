@@ -43,15 +43,18 @@
             </div>
             <!-- body -->
             <div class="chat__body">
-                <div class="chat__outgoing">
+                <!-- chat out -->
+                <!-- <div class="chat__outgoing">
                     <div class="chat__outgoing-content">
                         Hello! Jhon abraham
                     </div>
                     <div class="chat__outgoing-time">
                         09:25 AM
                     </div>
-                </div>
-                <div class="chat__incomming">
+                </div> -->
+
+                <!-- chat in -->
+                <!-- <div class="chat__incomming">
                     <div class="chat__incomming-avatar">
                         <img src="./assets/images/user.png" alt="user">
                     </div>
@@ -66,13 +69,14 @@
                     <div class="chat__incomming-time">
                         09:25 AM
                     </div>
-                </div>
+                </div> -->
             </div>
             <!-- footer -->
-            <div class="chat__footer">
-                <div class="chat__footer-form">
+            <div class="chat__footer" method="post">
+                <form class="chat__footer-form" send-message>
                     <input 
                         class="chat__footer-form-input"
+                        name="content";
                         placeholder="Write your message"
                     >
                     </input>
@@ -85,11 +89,15 @@
                     <button type="submit">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
-                </div>
+                </form>
             </div>
         </div>
         <!-- khối chat -->
 
+        <!-- khối thông báo chưa đăng nhập -->
+        <a href="login.html" class="need__login">
+            CHƯA ĐĂNG NHẬP
+        </a>
     </div>
     <!-- aos js -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

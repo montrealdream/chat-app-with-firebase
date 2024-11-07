@@ -18,6 +18,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    position: relative;
 }
 
 /* chatbox */
@@ -310,6 +311,7 @@ body {
     font-size: 16px;
     font-weight: 500;
 }
+
 .chat .chat__header-image {
     width: 44px;
     height: 44px;
@@ -331,22 +333,27 @@ body {
 }
 
 .chat .chat__body .chat__outgoing {
-    display: flex;
-    justify-content: flex-end;
+    /* display: flex;
+    justify-content: flex-end; */
     position: relative;
 }
 
 .chat .chat__outgoing, .chat .chat__incomming {
-    margin-bottom: 20px;
+    margin-bottom: 28px;
 }
 
 .chat .chat__body .chat__outgoing-content {
     padding: 12px;
     border-radius: 10px 0px 10px 10px;
+
     background-color: #20A090;
     color: #FFFFFF;
     font-size: 12px;
     font-weight: 450;
+
+    margin-left: auto;
+    max-width: 220px;
+    line-height: 1.4;
 }
 
 .chat .chat__body .chat__outgoing-time {
@@ -386,12 +393,19 @@ body {
 }
 
 .chat .chat__body .chat__incomming-content {
+    padding: 12px;
+    border-radius: 0px 10px 10px 10px;
+
     background-color: #F2F7FB;
     color: #000E08;
     font-size: 12px;
     font-weight: 450;
-    padding: 12px;
-    border-radius: 0px 10px 10px 10px;
+
+    margin-right: auto;
+    max-width: 220px;
+    line-height: 1.4;
+
+    position: relative;
 }
 
 .chat .chat__body .chat__incomming-time {
@@ -399,8 +413,8 @@ body {
     font-size: 10px;
     font-weight: 450;
     position: absolute;
-    left: 50px;
-    top: 62px;
+    bottom: -18px;
+    right: 15px;
 }
 
 .chat__footer {
@@ -518,6 +532,34 @@ body {
     width: 1180px;
     margin: 0 auto;
 }
+/* laptop cỡ nhỏ */
+@media (max-width: 1199.98px) {
+    .container {
+        width: 960px;
+    }
+}
+
+/* máy tính bảng cỡ lớn */
+@media (max-width: 991.98px) {
+    .container {
+        width: 720px;
+    }
+}
+
+/* máy tính bảng cỡ nhỏ */
+@media (max-width: 767.98px) {
+    .container {
+        width: 540px;
+    }
+}
+
+/* điện thoại */
+@media (max-width: 575.98px) {
+    .container {
+        width: 100%;
+        padding: 0px 16px 0px 16px;
+    }
+}
 /* hết container */
 
 /* user */
@@ -545,3 +587,14 @@ body {
     color: white;
 }
 /* hết user */
+
+/* need login */
+.need__login {
+    display: none;
+    position: absolute;
+    color: #ddd;
+    font-size: 98px;
+    font-weight: 700;
+    transform: rotate(-15deg);
+}
+/* hết need login */

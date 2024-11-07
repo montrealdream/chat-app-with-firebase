@@ -1,9 +1,9 @@
 // Import chức năng từ các SDK
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 
-import { getDatabase, ref, push, set, onValue, remove, update  }from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { getDatabase, ref, push, set, onValue, remove, update, onChildAdded, child, get  }from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -20,6 +20,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();   // hỗ trợ authen
 const db = getDatabase(); // hỗ trợ database
+let   currentUser = null;   // lưu user đã đăng nhập
+const dbRef = ref(getDatabase()); // tham chiếu đến database
+const chatReference = ref(db, 'chats'); // db lưu đoạn chat
+const userReference = ref(db, 'users'); // db lưu user
 
 import { fullNameValidate, emailValidate, passwordValidate } from "./validate.js";
 import showAlert from "./alert.js";
@@ -54,6 +58,25 @@ const passwordShowEvent = (formElement) => {
     }
 }
 // hết ẩn, hiện mật khẩu
+
+// kiểm tra trạng thái đăng nhập
+const loginUser = document.querySelector('[login-user]'); // khối user đã đăng nhập
+const chat =  document.querySelector('.chat'); // hộp chat
+const needLogin = document.querySelector('.need__login');
+
+onAuthStateChanged(auth, (user) => {
+    // nếu user chưa đang nhập thì vào trang đăng nhập
+    if(!user) {
+        loginUser.style.display = 'none';
+        chat.style.display = 'none';
+        needLogin.style.display = 'block';
+        return;
+    }
+    // nếu user đã đăng nhập
+    currentUser = user;
+
+});
+// hết kiểm tra trạng thái đăng nhập
 
 // form login
 const loginFormClass = document.querySelector(".login__form");
@@ -291,3 +314,117 @@ if(forgotPassword) {
     });
 }
 // hết tính năng quên mật khẩu
+
+// gửi tin nhắn
+const sendMessage = document.querySelector('[send-message]');
+if(sendMessage) {
+    logFeature('Đăng nhập', 'Thành công');
+    sendMessage.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const userID = auth.currentUser.uid; // id của người chat
+        const content = sendMessage.content.value; // nội dung chat
+        
+        // lưu tin nhắn mới
+        if(userID && content) {
+            const messageID = push(chatReference); // tạo ID cho đoạn chat
+
+            // lưu vào database
+            set(messageID, {
+                userID: userID,
+                content: content
+            });
+        }
+
+        // xóa nội dung trong ô chat
+        sendMessage.content.value = "";
+    });
+}
+// hết gửi tin nhắn
+
+// chèn tin nhắn mình gửi đi
+const messageOutGoingInsert = (element, props) => {
+    element.setAttribute('class', 'chat__outgoing');
+
+    element.innerHTML = `
+        <div class="chat__outgoing-content">
+            ${props.content}
+        </div>
+        <div class="chat__outgoing-time">
+            09:25 AM
+        </div>
+    `;
+
+    return element
+}
+// hết chèn tin nhắn mình gửi đi
+
+// chèn tin nhắn người khác gửi đến
+const messageInCommingInsert = (element, props) => {
+    element.setAttribute('class', 'chat__incomming');
+
+    element.innerHTML = `
+        <div class="chat__incomming-avatar">
+            <img src='https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books/blob/master/PHP/Original_by_Tkimz_Php_Programming_Book.png?raw=true' alt="user">
+        </div>
+        <div class="chat__incomming-main">
+            <div class="chat__incomming-userName">
+                ${props.fullName}
+            </div>
+            <div class="chat__incomming-content">
+                ${props.content}
+                <div class="chat__incomming-time">
+                    09:25 AM
+                </div>
+            </div>
+        </div>
+    `;
+
+    return element;
+}
+// hết chèn tin nhắn người khác gửi đến
+
+// vẽ tin nhắn ra giao diện: https://firebase.google.com/docs/database/web/lists-of-data (sử dụng onChildAdd để cập nhật những thay đổi)
+const chatBody = document.querySelector('.chat__body');
+if(chatBody) {
+    // chỉ cập nhật những gì mới có trong database
+    onChildAdded(chatReference, (data) => {
+        const myID = currentUser.uid; // lấy ID của mình
+
+        // object chứa thông tin của tin nhắn (message)
+        let messsageObject = {
+            messageID: data.key, // ID của tin nhắn
+            userID: data.val().userID, // ID của chủ tin nhắn
+            content: data.val().content, // nội dung tin nhắn
+        }
+
+        
+        // lấy tên của người gửi tin nhắn
+        get(child(dbRef, `users/` + messsageObject.userID)).then(user => {
+                if(user.exists()) {
+                    messsageObject.fullName = user.val().fullName;
+                    messsageObject.avatar   = user.val().avatar;
+                    // thẻ div bọc tin nhắn
+                    let divChat = document.createElement('div');
+
+                    // nếu là tin nhắn của mình gửi
+                    if(messsageObject.userID === myID) {
+                        divChat = messageOutGoingInsert(divChat, messsageObject);
+                    }
+
+                    // nếu là tin nhắn người khác gửi
+                    else {
+                        divChat = messageInCommingInsert(divChat, messsageObject);
+                    }
+
+                    // đưa vào giao diện chat
+                    chatBody.appendChild(divChat);
+
+                    // scroll màn hình khi tin nhắn tràn (lưu ý khi append thì mới srcoll xuống)
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                    // hết scroll màn hình khi tin nhắn tràn
+                }
+            });
+    });
+}
+// hết vẽ tin nhắn ra giao diên

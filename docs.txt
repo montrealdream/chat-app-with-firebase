@@ -1,1 +1,3 @@
 Khi đã đăng nhập bằng email với Google mà dùng emaild đó đăng nhập với tài khoản Facebook thì sẽ không được
+
++   Mã lỗi này sẽ xuất hiện 'invalid-credential' khi bạn đăng nhập bằng email mà chưa tạo tài khoản. (Chưa khắc phục). đọc thêm ở đây cập nhật sau: https://stackoverflow.com/questions/66633263/how-to-check-if-email-exists-in-firebase-auth

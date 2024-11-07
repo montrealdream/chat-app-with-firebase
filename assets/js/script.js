@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebas
 
 import { getDatabase, ref, push, set, onValue, remove, update  }from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -151,14 +151,19 @@ if(loginForm) {
                 .then((userCredential) => {
                     const user = userCredential.user;
                     if(user) {
-                        logFeature('Đăng nhập bằng email', 'Thành công');
+                        console.log(user);
+                        // logFeature('Đăng nhập bằng email', 'Thành công');
                         // chuyển hướng đến trang chat
                         window.location.href = 'chat.html'
                     }
+                    else 
+                        showAlert('Bạn chưa có tài khoản', 'warning', 5000);
                 })
                 .catch((error) => {
+                    showAlert('Đã xảy ra lỗi khi đăng nhập', 'error', 8000);
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    logFeature('Mã Lỗi', errorCode);
                 });
         }
     });
@@ -252,3 +257,37 @@ if(logout) {
     });
 }
 // hết tính năng đăng xuất
+
+// tính năng quên mật khẩu
+const forgotPassword = document.querySelector('[forgot-password]');
+if(forgotPassword) {
+    forgotPassword.addEventListener("submit", event => {
+        event.preventDefault();
+
+        const email = forgotPassword.email.value;
+
+        // validate email
+        const isEmailValid = emailValidate(email);
+        if(isEmailValid.status === false) {
+            showAlert(isEmailValid.messages, 'warning', 5000);
+            return;
+        }
+
+        const actionCodeSettings = {
+            url: `http://127.0.0.1:5500/FrontEnd/chat-app-firebase/login.html`
+        }
+
+        if(email) {
+            sendPasswordResetEmail(auth, email, actionCodeSettings)
+                .then(() => {
+                    showAlert('Đã gửi mã OTP qua email', 'success', 5000);
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // ..
+                });
+        }
+    });
+}
+// hết tính năng quên mật khẩu

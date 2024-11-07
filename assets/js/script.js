@@ -211,8 +211,8 @@ if(loginWithFacebook) {
                 const user = result.user;
                 const credential = FacebookAuthProvider.credentialFromResult(result);
                 const accessToken = credential.accessToken;
-
-                window.location.href = 'chat.html';
+                console.log(user);
+                // window.location.href = 'chat.html';
                 // Lưu vào database realtime
                 // set(ref(db, 'users/' + user.uid), {
                 //     fullName: user.displayName,

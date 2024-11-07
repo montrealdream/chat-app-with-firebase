@@ -211,17 +211,16 @@ if(loginWithFacebook) {
                 const user = result.user;
                 const credential = FacebookAuthProvider.credentialFromResult(result);
                 const accessToken = credential.accessToken;
-                console.log(user);
-                // window.location.href = 'chat.html';
+
                 // Lưu vào database realtime
-                // set(ref(db, 'users/' + user.uid), {
-                //     fullName: user.displayName,
-                //     avatar: user.photoURL //avatar từ google
-                // })
-                //     .then(() => {
-                //         // chyển hướng sang trang chat
-                //         window.location.href = 'chat.html';
-                // })
+                set(ref(db, 'users/' + user.uid), {
+                    fullName: user.displayName,
+                    avatar: user.photoURL //avatar từ google
+                })
+                    .then(() => {
+                        // chyển hướng sang trang chat
+                        window.location.href = 'chat.html';
+                })
             })
             .catch((error) => {
                 // Handle Errors here.

@@ -30,7 +30,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 375px;
+    width: 380px;
 
     position: relative;
 }
@@ -71,8 +71,9 @@ body {
     font-size: 16px;
     font-weight: 500;
 }
-
-.chatbox .chatbox__sign-up-email {
+.chatbox__sign-up-email {
+    position: relative;
+    text-decoration: none;
     width: 327px;
     display: inline-flex;
     justify-content: center;
@@ -295,7 +296,7 @@ body {
     padding: 10px;
     border: 1px solid #DDDDDD;
     border-radius: 12px;
-    width: 400px;
+    width: 768px;
 }
 
 .chat .chat__header {
@@ -325,7 +326,7 @@ body {
 
 .chat .chat__body {
     padding: 10px 0px;
-    height: 300px;
+    height: 498px;
     overflow-y: auto;
 }
 
@@ -449,3 +450,65 @@ body {
 }
 /* hết chat */
 
+/* alert */
+.alert {
+    /* vị trí */
+    position: fixed;
+    top: 50px;
+    right: 100px;
+    z-index: 9999;
+
+    /* thông báo đẩy */
+    display: inline-flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.alert__item {
+    position: relative;
+    display: inline-flex;
+    width: 250px;
+    padding: 8px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.hideAlert {
+    /* sử dụng keyframe animation */
+    animation-name: alert-hidden;
+    animation-duration: 0.5s; /** thời gian thực hiện */
+    animation-fill-mode: both;
+}
+  
+@keyframes alert-hidden {
+    from {
+      left: 0;
+    }
+    to {
+      left: 200%;
+      display: none;
+    }
+}
+
+.alert__item [close-alert] {
+    cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 8px;
+}
+
+.alert--success {
+    background-color: #D4EDDA;
+    color: #275724;
+}
+
+.alert--error {
+    background-color: #F8D7DA;
+    color: #721C24;
+}
+
+.alert--warning {
+    background-color: #FFF3CD;
+    color: #906404;
+}
+/* hết alert */

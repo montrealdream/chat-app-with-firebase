@@ -1,3 +1,29 @@
+// Import chức năng từ các SDK
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+
+import { getDatabase, ref, push, set, onValue, remove, update  }from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCGpcZ6bJoECqwdLonwRZeBMfWC8WLuhAI",
+  authDomain: "chat-app-80674.firebaseapp.com",
+  databaseURL: "https://chat-app-80674-default-rtdb.firebaseio.com",
+  projectId: "chat-app-80674",
+  storageBucket: "chat-app-80674.firebasestorage.app",
+  messagingSenderId: "827550440639",
+  appId: "1:827550440639:web:2f860dc382bcdb15fb7a0a"
+};
+
+// Khởi tạo Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();   // hỗ trợ authen
+const db = getDatabase(); // hỗ trợ database
+
+import { fullNameValidate, emailValidate, passwordValidate } from "./validate.js";
+import showAlert from "./alert.js";
+
 // ẩn, hiện mật khẩu
 const passwordShowEvent = (formElement) => {
     const inputPassword = formElement.querySelector('input[name="password"]');
@@ -29,3 +55,61 @@ if(loginForm) {
     passwordShowEvent(loginForm);
 }
 // hết form login
+
+// tính năng đăng ký
+const signUpForm = document.querySelector('[sign-up]');
+if(signUpForm) {
+    signUpForm.addEventListener('submit', event => {
+        event.preventDefault();
+
+        const fullName = signUpForm.fullName.value;
+        const email    = signUpForm.email.value;
+        const password = signUpForm.password.value;
+
+        // validate họ tên
+        const isFullNameValid = fullNameValidate(fullName);
+        if(isFullNameValid.status === false) {
+            showAlert(isFullNameValid.messages, 'warning', 5000);
+            return;
+        }
+
+        // validate email
+        const isEmailValid = emailValidate(email);
+        if(isEmailValid.status === false) {
+            showAlert(isEmailValid.messages, 'warning', 5000);
+            return;
+        }
+
+        // validate mật khẩu
+        const isPasswordlValid = passwordValidate(password);
+        if(isPasswordlValid.status === false) {
+            showAlert(isPasswordlValid.messages, 'warning', 5000);
+            return;
+        }
+
+        // firebase
+        if(fullName && email && password) {
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    if(user) {
+                        console.log(user);
+                        // lưu vào database real time, sử dụng ID của user vừa tạo làm ID
+                        set(ref(db, 'users/' + user.uid), {
+                            fullName: fullName,
+                            avatar: 'https://i.sstatic.net/l60Hf.png' //avatar mặc định
+                        })
+                            .then(() => {
+                                // chyển hướng sang trang chat
+                                window.location.href = 'chat.html';
+                            })
+                    }
+                })
+                .catch(error => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                }); 
+        } 
+    });
+}
+// kết tính năng đăng ký

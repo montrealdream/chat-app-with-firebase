@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebas
 
 import { getDatabase, ref, push, set, onValue, remove, update  }from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -177,7 +177,7 @@ if(loginWithGoolge) {
                 const token = credential.accessToken;
                 const user = result.user;
                 console.log(user);
-                // // Lưu vào database real time
+                // Lưu vào database real time
                 set(ref(db, 'users/' + user.uid), {
                     fullName: user.displayName,
                     avatar: user.photoURL //avatar từ google
@@ -199,6 +199,43 @@ if(loginWithGoolge) {
     });
 }
 // hết đăng nhập với google
+
+// đăng nhập với facebook (lưu ý khi deploy rồi mới dùng được)
+const loginWithFacebook = document.querySelector('[login-with-facebook]');
+if(loginWithFacebook) {
+    const provider = new FacebookAuthProvider(); // facebook provider
+
+    loginWithFacebook.addEventListener("click", event => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                const credential = FacebookAuthProvider.credentialFromResult(result);
+                const accessToken = credential.accessToken;
+
+                // Lưu vào database realtime
+                set(ref(db, 'users/' + user.uid), {
+                    fullName: user.displayName,
+                    avatar: user.photoURL //avatar từ google
+                })
+                    .then(() => {
+                        // chyển hướng sang trang chat
+                        window.location.href = 'chat.html';
+                })
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = FacebookAuthProvider.credentialFromError(error);
+
+                // ...
+            });
+    });
+}
+// hết đăng nhập với facebook (lưu ý khi deploy rồi mới dùng được)
 
 // tính năng đăng xuất
 const logout = document.querySelector('[logout]');

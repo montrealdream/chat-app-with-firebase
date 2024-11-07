@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebas
 
 import { getDatabase, ref, push, set, onValue, remove, update  }from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -23,6 +23,12 @@ const db = getDatabase(); // hỗ trợ database
 
 import { fullNameValidate, emailValidate, passwordValidate } from "./validate.js";
 import showAlert from "./alert.js";
+
+// hàm log 
+const logFeature = (feature, state) => {
+    console.log(feature + ':::' + state);
+}
+// hết hàm log
 
 // ẩn, hiện mật khẩu
 const passwordShowEvent = (formElement) => {
@@ -120,6 +126,8 @@ if(loginForm) {
     loginForm.addEventListener("submit", event => {
         event.preventDefault();
 
+        logFeature('Tính năng', 'Đăng nhập');
+
         const email = loginForm.email.value;
         const password = loginForm.password.value;
 
@@ -143,8 +151,9 @@ if(loginForm) {
                 .then((userCredential) => {
                     const user = userCredential.user;
                     if(user) {
+                        logFeature('Đăng nhập bằng email', 'Thành công');
                         // chuyển hướng đến trang chat
-                        window.location.href = 'login.html'
+                        window.location.href = 'chat.html'
                     }
                 })
                 .catch((error) => {
@@ -155,3 +164,20 @@ if(loginForm) {
     });
 }
 // hết tính năng đăng nhập
+
+// tính năng đăng xuất
+const logout = document.querySelector('[logout]');
+console.log(logout)
+if(logout) {
+    logout.addEventListener('click', event => {
+        signOut(auth)
+            .then(() => {
+                // chuyển hướng
+                window.location.href = 'index.html';
+            })
+            .catch((error) => {
+            
+            });
+    });
+}
+// hết tính năng đăng xuất

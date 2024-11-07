@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebas
 
 import { getDatabase, ref, push, set, onValue, remove, update  }from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -50,9 +50,9 @@ const passwordShowEvent = (formElement) => {
 // hết ẩn, hiện mật khẩu
 
 // form login
-const loginForm = document.querySelector(".login__form");
-if(loginForm) {
-    passwordShowEvent(loginForm);
+const loginFormClass = document.querySelector(".login__form");
+if(loginFormClass) {
+    passwordShowEvent(loginFormClass);
 }
 // hết form login
 
@@ -113,3 +113,45 @@ if(signUpForm) {
     });
 }
 // kết tính năng đăng ký
+
+// tính năng đăng nhập
+const loginForm = document.querySelector('[login]');
+if(loginForm) {
+    loginForm.addEventListener("submit", event => {
+        event.preventDefault();
+
+        const email = loginForm.email.value;
+        const password = loginForm.password.value;
+
+        // validate email
+        const isEmailValid = emailValidate(email);
+        if(isEmailValid.status === false) {
+            showAlert(isEmailValid.messages, 'warning', 5000);
+            return;
+        }
+
+        // validate mật khẩu
+        const isPasswordlValid = passwordValidate(password);
+        if(isPasswordlValid.status === false) {
+            showAlert(isPasswordlValid.messages, 'warning', 5000);
+            return;
+        }
+
+        // firebase
+        if(email && password) {
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    if(user) {
+                        // chuyển hướng đến trang chat
+                        window.location.href = 'login.html'
+                    }
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                });
+        }
+    });
+}
+// hết tính năng đăng nhập

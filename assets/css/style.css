@@ -512,3 +512,36 @@ body {
     color: #906404;
 }
 /* hết alert */
+
+/* container */
+.container {
+    width: 1180px;
+    margin: 0 auto;
+}
+/* hết container */
+
+/* user */
+.user {
+    background-color: #20A090;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 0px 0px 20px 20px;
+}
+
+.user__name {
+    font-size: 16px;
+    font-weight: 450;
+}
+
+.user__logout {
+    cursor: pointer;
+    border: 1px solid #721C24;
+    border-radius: 8px;
+    padding: 5px;
+    background-color: #721C24;
+    color: white;
+}
+/* hết user */

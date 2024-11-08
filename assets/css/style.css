@@ -533,6 +533,25 @@ body {
 }
 /* hết chat */
 
+/* icon emoji picker element */
+emoji-picker {
+    display: block;
+    position: absolute;
+    right: 63px;
+    bottom: 58px;
+    --border-radius: 8px 8px 0px 8px;
+}
+
+/* sử dụng khi mình tự viết ẩn hiện bảng icon */
+/* emoji-picker[show=""] {
+    display: none; 
+} */
+
+.tooltip:not(.shown) {
+    display: none; /* sử dụng khi mình dùng sẵn tính năng ẩn hiện bảng icon */
+}
+/* hết icon emoji picker element */
+
 /* alert */
 .alert {
     /* vị trí */
@@ -601,6 +620,7 @@ body {
     width: 1180px;
     margin: 0 auto;
 }
+
 /* laptop cỡ nhỏ */
 @media (max-width: 1199.98px) {
     .container {

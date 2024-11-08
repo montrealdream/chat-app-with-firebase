@@ -5,6 +5,9 @@ import { getDatabase, ref, push, set, onValue, remove, update, onChildAdded, chi
 
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
+
+import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js' // hỗ trợ ẩn hiện bảng icon
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCGpcZ6bJoECqwdLonwRZeBMfWC8WLuhAI",
@@ -25,8 +28,11 @@ const dbRef = ref(getDatabase()); // tham chiếu đến database
 const chatReference = ref(db, 'chats'); // db lưu đoạn chat
 const userReference = ref(db, 'users'); // db lưu user
 
-import { fullNameValidate, emailValidate, passwordValidate } from "./validate.js";
-import showAlert from "./alert.js";
+import { fullNameValidate, emailValidate, passwordValidate } from "./validate.js"; // hỗ trợ validate đăng nhập, đăng kí, ...
+
+import showAlert from "./alert.js"; // show thông báo
+
+import clickOutSideEvent from "./clickOutSide.js"; // sự kiện click ra ngoài một element
 
 // hàm log 
 const logFeature = (feature, state) => {
@@ -317,6 +323,10 @@ if(forgotPassword) {
 
 // gửi tin nhắn
 const sendMessage = document.querySelector('[send-message]');
+const emjoiPicker = document.querySelector('emoji-picker');
+const tooltip = document.querySelector('.tooltip');
+const chatIcon = sendMessage.querySelector("[chat-icon] i");
+
 if(sendMessage) {
     logFeature('Đăng nhập', 'Thành công');
     sendMessage.addEventListener('submit', event => {
@@ -338,9 +348,56 @@ if(sendMessage) {
 
         // xóa nội dung trong ô chat
         sendMessage.content.value = "";
+
+        // đóng bảng icon
+        tooltip.classList.remove('shown');
     });
 }
 // hết gửi tin nhắn
+
+// chèn icon
+if(emjoiPicker && sendMessage) {
+    emjoiPicker.addEventListener('emoji-click', event => {
+        const icon = event.detail.unicode;
+
+        // nối icon vào đoạn tin nhắn hiện tại
+        sendMessage.content.value = sendMessage.content.value + icon;  
+        console.log(icon); 
+        
+    });
+}
+// hết chèn icon
+
+// khi click ra ngoài bảng icon thì đóng bảng icon lại
+clickOutSideEvent(chatIcon, () => {
+    tooltip.classList.remove('shown');
+});
+// hết khi click ra ngoài bảng icon thì đóng bảng icon lại
+
+// khi nhấn vào biểu tượng icon thì sẽ show  bảng icon ra
+if(sendMessage && emjoiPicker) {
+    // phần mình tự viết
+    // chatIcon.addEventListener("click", event => {
+    //     // lấy trạng thái ra xem đang show hay ẩn bảng icon
+    //     const isShow = emjoiPicker.getAttribute("show");
+
+    //     if(isShow === "yes") {
+    //         emjoiPicker.setAttribute("show", "");
+    //     }
+
+    //     else {
+    //         emjoiPicker.setAttribute("show", "yes");
+    //     }
+    // });
+
+
+    // dùng tooltip có sẵn
+    chatIcon.addEventListener("click", event => {
+        tooltip.classList.toggle('shown');
+    });
+
+}
+// khi nhấn vào biểu tượng icon thì sẽ show  bảng icon ra
 
 // chèn tin nhắn mình gửi đi
 const messageOutGoingInsert = (element, props) => {
@@ -417,12 +474,13 @@ const messageInCommingInsert = (element, props) => {
 
 // ẩn hiện chat option và xóa tin nhắn
 const chatOptionEvent = (chatBody ,element) => {
-    const ButtonChatOption = element.querySelector("[option-chat]");
+    const ButtonChatOption = element.querySelector("[option-chat] i");
     const TableChatOption  = element.querySelector("[message-optionList]");
 
     const buttonDeleteMessage = TableChatOption.querySelector("[message-id]");
 
     if(ButtonChatOption) {
+        // mở bảng option
         ButtonChatOption.addEventListener("click", event => {
             const isShow = TableChatOption.getAttribute("message-optionList");
             
@@ -459,6 +517,11 @@ const chatOptionEvent = (chatBody ,element) => {
                         });
                 }
             });
+        });
+
+        // đóng bảng table option chat lại nếu click ra ngoài
+        clickOutSideEvent(ButtonChatOption, () => {
+            TableChatOption.setAttribute("message-optionList", "");
         });
     }
 }

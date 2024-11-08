@@ -110,9 +110,17 @@
                         09:25 AM
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- footer -->
             <div class="chat__footer" method="post">
+                <!-- sử dụng khi tự viết ẩn hiện bảng icon -->
+                <!-- <emoji-picker show></emoji-picker> -->
+                
+                <!-- sử dụng tính năng ẩn hiện bảng icon có sẵn -->
+                <div class="tooltip" role="tooltip">
+                    <emoji-picker></emoji-picker>
+                </div>
+
                 <form class="chat__footer-form" send-message>
                     <input 
                         class="chat__footer-form-input"
@@ -123,7 +131,7 @@
                     <div class="chat__footer-form-coppy">
                         <i class="fa-regular fa-copy"></i>
                     </div>
-                    <span class="chat__footer-form-icon">
+                    <span class="chat__footer-form-icon" chat-icon>
                         <i class="fa-regular fa-face-smile"></i>
                     </span>
                     <button type="submit">
@@ -145,6 +153,9 @@
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
+    <!-- emoji picker element chèn icon -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+
     <!-- js -->
     <script type="module" src="./assets/js/script.js"></script>
 </body>

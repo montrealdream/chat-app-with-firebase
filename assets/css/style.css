@@ -332,14 +332,9 @@ body {
     overflow-y: auto;
 }
 
-.chat .chat__body .chat__outgoing {
-    /* display: flex;
-    justify-content: flex-end; */
-    position: relative;
-}
-
 .chat .chat__outgoing, .chat .chat__incomming {
     margin-bottom: 28px;
+    position: relative;
 }
 
 .chat .chat__body .chat__outgoing-content {
@@ -354,6 +349,8 @@ body {
     margin-left: auto;
     max-width: 220px;
     line-height: 1.4;
+
+    position: relative;
 }
 
 .chat .chat__body .chat__outgoing-time {
@@ -363,6 +360,63 @@ body {
     color: #797C7B;
     font-size: 10px;
     font-weight: 450;
+}
+
+.chat .chat__outgoing-icon {
+    cursor: pointer;
+    color: black;
+    position: absolute;
+    right: 228px;
+    top: 10px;
+}
+
+.chat .chat__outgoing-option {
+    /* reset ul */
+    list-style: none;
+    margin: 0px;
+    padding: 0;
+
+    background-color: #ddd;
+    padding: 5px;
+    border-radius: 6px 0px 6px 6px;
+    width: 150px;
+
+    position: absolute;
+    left: -153px;
+    bottom: -81px;
+}
+
+.chat__outgoing-option li {
+    padding: 4px 8px;
+}
+
+.chat__outgoing-option a{
+    text-decoration: none;
+    color: black;
+}
+
+.chat .chat__incomming-option {
+    /* reset ul */
+    list-style: none;
+    margin: 0px;
+    padding: 0;
+
+    background-color: #ddd;
+    padding: 5px;
+    border-radius: 0px 6px 6px 6px;
+    width: 150px;
+
+    position: absolute;
+    right: -153px;
+}
+
+.chat__incomming-option li {
+    padding: 4px 8px;
+}
+
+.chat__incomming-option a{
+    text-decoration: none;
+    color: black;
 }
 
 .chat .chat__body .chat__incomming {
@@ -406,6 +460,13 @@ body {
     line-height: 1.4;
 
     position: relative;
+}
+
+.chat .chat__incomming-icon {
+    cursor: pointer;
+    position: absolute;
+    right: -11px;
+    top: 13px;
 }
 
 .chat .chat__body .chat__incomming-time {
@@ -461,6 +522,14 @@ body {
     border-radius: 50%;
     background-color: #20A090;
     color: white;
+}
+
+.chat [message-optionList=""] {
+    display: none;
+}
+
+.chat [message-optionList="yes"] {
+    display: block;
 }
 /* hết chat */
 

@@ -345,15 +345,30 @@ if(sendMessage) {
 // chèn tin nhắn mình gửi đi
 const messageOutGoingInsert = (element, props) => {
     element.setAttribute('class', 'chat__outgoing');
-
     element.innerHTML = `
         <div class="chat__outgoing-content">
             ${props.content}
+            <div class="chat__outgoing-icon" option-chat>
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+                <ul class="chat__outgoing-option" message-optionList>
+                    <li message-id=${props.messageID}>
+                        <a href="javascript:;">Xóa</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">Chuyển tiếp</a>
+                    </li>
+                    <li>
+                        <a href="javascript:;">Ghim</a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="chat__outgoing-time">
             09:25 AM
         </div>
     `;
+
+    element.setAttribute('delete-id', props.messageID); // ID của tin nhắn để xóa
 
     return element
 }
@@ -361,8 +376,8 @@ const messageOutGoingInsert = (element, props) => {
 
 // chèn tin nhắn người khác gửi đến
 const messageInCommingInsert = (element, props) => {
+    
     element.setAttribute('class', 'chat__incomming');
-
     element.innerHTML = `
         <div class="chat__incomming-avatar">
             <img src='https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books/blob/master/PHP/Original_by_Tkimz_Php_Programming_Book.png?raw=true' alt="user">
@@ -373,6 +388,20 @@ const messageInCommingInsert = (element, props) => {
             </div>
             <div class="chat__incomming-content">
                 ${props.content}
+                <div class="chat__incomming-icon" option-chat>
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                    <ul class="chat__incomming-option" message-optionList>
+                        <li message-id=${props.messageID}>
+                            <a href="javascript:;">Xóa</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">Chuyển tiếp</a>
+                        </li>
+                        <li>
+                            <a href="javascript:;">Ghim</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="chat__incomming-time">
                     09:25 AM
                 </div>
@@ -380,9 +409,60 @@ const messageInCommingInsert = (element, props) => {
         </div>
     `;
 
+    element.setAttribute('delete-id', props.messageID); // ID của tin nhắn để xóa
+
     return element;
 }
 // hết chèn tin nhắn người khác gửi đến
+
+// ẩn hiện chat option và xóa tin nhắn
+const chatOptionEvent = (chatBody ,element) => {
+    const ButtonChatOption = element.querySelector("[option-chat]");
+    const TableChatOption  = element.querySelector("[message-optionList]");
+
+    const buttonDeleteMessage = TableChatOption.querySelector("[message-id]");
+
+    if(ButtonChatOption) {
+        ButtonChatOption.addEventListener("click", event => {
+            const isShow = TableChatOption.getAttribute("message-optionList");
+            
+            if(isShow === "yes") 
+                TableChatOption.setAttribute("message-optionList", "");
+    
+            else 
+                TableChatOption.setAttribute("message-optionList", "yes");
+        });
+        
+        // xóa cứng tin nhắn
+        buttonDeleteMessage.addEventListener('click', event => {
+            // hiển thị modal
+            Swal.fire({
+                title: "Bạn có chắc muốn xóa",
+                input: "Sau khi xóa sẽ không khôi phục lại được",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6", // màu nút xác nhận
+                cancelButtonColor: "#d33", // màu nút từ chối
+                confirmButtonText: "Vẫn xóa!",
+                cancelButtonText: "Không xóa"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const messageID = buttonDeleteMessage.getAttribute("message-id"); // lấy id của tin nhắn
+
+                    remove(ref(db, 'chats/' + messageID))
+                        .then(() => {
+                            // gỡ tin nhắn khỏi giao diện
+                            chatBody.removeChild(element);
+                            
+                            // show alert thông báo
+                            showAlert("Xóa tin nhắn thành công", 'success', 5000);
+                        });
+                }
+            });
+        });
+    }
+}
+// hết ẩn hiện chat option và xóa tin nhắn
 
 // vẽ tin nhắn ra giao diện: https://firebase.google.com/docs/database/web/lists-of-data (sử dụng onChildAdd để cập nhật những thay đổi)
 const chatBody = document.querySelector('.chat__body');
@@ -420,11 +500,14 @@ if(chatBody) {
                     // đưa vào giao diện chat
                     chatBody.appendChild(divChat);
 
+                    chatOptionEvent(chatBody, divChat); // ẩn hiện chat option và xóa tin nhắn
+
                     // scroll màn hình khi tin nhắn tràn (lưu ý khi append thì mới srcoll xuống)
                     chatBody.scrollTop = chatBody.scrollHeight;
                     // hết scroll màn hình khi tin nhắn tràn
                 }
             });
+
     });
 }
 // hết vẽ tin nhắn ra giao diên

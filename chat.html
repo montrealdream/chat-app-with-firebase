@@ -17,6 +17,17 @@
     <title>Chat</title>
 </head>
 <body>
+    <!-- alert thông báo -->
+    <div class="alert ">
+        <!-- <div class="alert__item alert--success">
+            <span>Tạo thành công !</span>
+            <span close-alert>
+                <i class="fa-solid fa-xmark"></i>
+            </span>
+        </div> -->
+    </div>  
+    <!-- hết alert thông báo -->
+
     <!-- khối user đang đăng nhập -->
     <div class="container">
         <div class="user" login-user>
@@ -47,11 +58,25 @@
                 <!-- <div class="chat__outgoing">
                     <div class="chat__outgoing-content">
                         Hello! Jhon abraham
+                        <div class="chat__outgoing-icon" option-chat>
+                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                            <ul class="chat__outgoing-option" message-optionList>
+                                <li>
+                                    <a href="javascript:;">Xóa</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">Chuyển tiếp</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;">Ghim</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="chat__outgoing-time">
                         09:25 AM
-                    </div>
-                </div> -->
+                    </div> -->
+                </div>
 
                 <!-- chat in -->
                 <!-- <div class="chat__incomming">
@@ -64,12 +89,27 @@
                         </div>
                         <div class="chat__incomming-content">
                             Have a great working week!!
+                            <div class="chat__incomming-icon" message-option>
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                <ul class="chat__incomming-option" message-optionList>
+                                    <li>
+                                        <a href="javascript:;">Xóa</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">Chuyển tiếp</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">Ghim</a>
+                                    </li>
+                                </ul>
+                            </div>
+                           
                         </div>
                     </div>
                     <div class="chat__incomming-time">
                         09:25 AM
                     </div>
-                </div> -->
+                </div>
             </div>
             <!-- footer -->
             <div class="chat__footer" method="post">
@@ -102,6 +142,9 @@
     <!-- aos js -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <!-- js -->
     <script type="module" src="./assets/js/script.js"></script>
 </body>

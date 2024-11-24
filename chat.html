@@ -7,8 +7,15 @@
     <!-- icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- aos js-->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- file upload with preview -->
+    <link
+        rel="stylesheet"
+        type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/file-upload-with-preview/6.1.2/style.min.css"
+    />
+
+    <!-- viewer js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css" integrity="sha512-za6IYQz7tR0pzniM/EAkgjV1gf1kWMlVJHBHavKIvsNoUMKWU99ZHzvL6lIobjiE2yKDAKMDSSmcMAxoiWgoWA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- css -->
     <link rel="stylesheet" href="./assets/css/style.css">
@@ -18,14 +25,7 @@
 </head>
 <body>
     <!-- alert thông báo -->
-    <div class="alert ">
-        <!-- <div class="alert__item alert--success">
-            <span>Tạo thành công !</span>
-            <span close-alert>
-                <i class="fa-solid fa-xmark"></i>
-            </span>
-        </div> -->
-    </div>  
+    <div class="alert "></div>  
     <!-- hết alert thông báo -->
 
     <!-- khối user đang đăng nhập -->
@@ -75,8 +75,8 @@
                     </div>
                     <div class="chat__outgoing-time">
                         09:25 AM
-                    </div> -->
-                </div>
+                    </div>
+                </div> -->
 
                 <!-- chat in -->
                 <!-- <div class="chat__incomming">
@@ -109,8 +109,9 @@
                     <div class="chat__incomming-time">
                         09:25 AM
                     </div>
-                </div>
-            </div> -->
+                </div> -->
+            </div>
+            
             <!-- footer -->
             <div class="chat__footer" method="post">
                 <!-- sử dụng khi tự viết ẩn hiện bảng icon -->
@@ -128,9 +129,13 @@
                         placeholder="Write your message"
                     >
                     </input>
-                    <div class="chat__footer-form-coppy">
+                    <!-- <div class="chat__footer-form-coppy">
                         <i class="fa-regular fa-copy"></i>
-                    </div>
+                    </div> -->
+                    <!-- dùng label for để khi nhấn vào nó sẽ trỏ tới input hiện tại -->
+                    <label for="file-upload-with-preview-upload-unique-id" class="chat__footer-form-icon" chat-image>
+                        <i class="fa-regular fa-image"></i>
+                    </label>
                     <span class="chat__footer-form-icon" chat-icon>
                         <i class="fa-regular fa-face-smile"></i>
                     </span>
@@ -138,6 +143,11 @@
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
                 </form>
+                <div 
+                    class="custom-file-container" 
+                    data-upload-id="upload-unique-id"
+                >
+                </div>
             </div>
         </div>
         <!-- khối chat -->
@@ -147,14 +157,18 @@
             CHƯA ĐĂNG NHẬP
         </a>
     </div>
-    <!-- aos js -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <!-- emoji picker element chèn icon -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+
+    <!-- file upload with preview -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/file-upload-with-preview/6.1.2/index.iife.min.js"></script>
+
+    <!-- viewer js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js" integrity="sha512-EC3CQ+2OkM+ZKsM1dbFAB6OGEPKRxi6EDRnZW9ys8LghQRAq6cXPUgXCCujmDrXdodGXX9bqaaCRtwj4h4wgSQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- js -->
     <script type="module" src="./assets/js/script.js"></script>

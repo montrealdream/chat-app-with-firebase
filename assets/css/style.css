@@ -72,6 +72,7 @@ body {
     font-size: 16px;
     font-weight: 500;
 }
+
 .chatbox__sign-up-email {
     position: relative;
     text-decoration: none;
@@ -283,6 +284,7 @@ body {
 .forgot-password {
     margin-top: 20px;
 }
+
 .forgot-password a {
     text-decoration: none;
     color: #FFFFFF;
@@ -531,7 +533,62 @@ body {
 .chat [message-optionList="yes"] {
     display: block;
 }
+
+.chat .chat__outgoing-images, .chat .chat__incoming-images {
+    margin-top: 5px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.chat .chat__outgoing-images img, .chat .chat__incoming-images img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+}
 /* hết chat */
+
+/* chat upload ảnh */
+.chat .custom-file-container {
+    padding: 8px;
+}
+
+.chat .custom-file-container .label-container {
+    display: none;
+}
+
+.chat .custom-file-container .input-container {
+    display: none;
+}
+
+.chat .custom-file-container .image-preview {
+    height: auto; /* phải để height auto để khi chèn ảnh dô thì khung này nó giãn ra */
+    padding: 0px;
+    background: transparent !important;
+}
+
+.chat .custom-file-container .image-preview .image-preview-item {
+    aspect-ratio: 1/1;
+    width: 100px;
+    height: 100px;
+    box-shadow: none;
+    background-size: contain;
+}
+
+.chat .custom-file-container .image-preview-item-clear {
+    left: auto; /* mặc định có left: -6px nên muốn reset nó thì dùng left auto */
+    background: red;
+    right: -12px;
+    top: -4px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat .custom-file-container .image-preview-item-clear-icon {
+    color: white !important;
+}
+/* hết chat upload ảnh */
 
 /* icon emoji picker element */
 emoji-picker {

@@ -69,7 +69,6 @@ const passwordShowEvent = (formElement) => {
 const loginUser = document.querySelector('[login-user]'); // khối user đã đăng nhập
 const chat =  document.querySelector('.chat'); // hộp chat
 const needLogin = document.querySelector('.need__login');
-
 onAuthStateChanged(auth, (user) => {
     // nếu user chưa đang nhập thì vào trang đăng nhập
     if(!user) {
@@ -326,36 +325,77 @@ const sendMessage = document.querySelector('[send-message]');
 const emjoiPicker = document.querySelector('emoji-picker');
 const tooltip = document.querySelector('.tooltip');
 const chatIcon = sendMessage.querySelector("[chat-icon] i");
-
 if(sendMessage) {
-    logFeature('Đăng nhập', 'Thành công');
-    sendMessage.addEventListener('submit', event => {
+    // upload hình ảnh khi chat
+    const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-unique-id', {
+        maxFileCount: 6,
+        multiple: true
+    });
+    
+
+    sendMessage.addEventListener('submit', async event => {
         event.preventDefault();
+
 
         const userID = auth.currentUser.uid; // id của người chat
         const content = sendMessage.content.value; // nội dung chat
         
-        // lưu tin nhắn mới
-        if(userID && content) {
-            const messageID = push(chatReference); // tạo ID cho đoạn chat
+        const  images = upload.cachedFileArray || []; // lấy ảnh gửi đi
 
-            // lưu vào database
+        
+        if(userID && (content|| images.length > 0)) {
+            const linkImages = [];
+
+            // nếu có ảnh thì sẽ upload ảnh lên cloudinary
+            if(images.length > 0) {
+                const CLOUD_NAME = 'dvm1ypggz'; // lấy ở trang chủ dashboard cloudinary
+            
+                const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+    
+                const formData = new FormData();
+    
+                for (let i = 0; i < images.length; i++) {
+                    let file = images[i];
+                    formData.append('file', file);
+    
+                    /* 
+                        docs_upload_example_us_preset: lấy lên trang chủ
+                        lưu ý là khi lấy thì cái mode của key scecret này phải ở dạng unsigned (chưa ký)
+                    */
+    
+                    const docs_upload_example_us_preset = 'smjldtxq';
+                    formData.append('upload_preset', docs_upload_example_us_preset);
+    
+                    await fetch(url, { method: 'POST', body: formData,})
+                        .then((response) => response.json())
+                        .then((data) => {
+                            const link = data.url;
+                            linkImages.push(link);
+                        });
+                }
+            }
+
+            const messageID = push(chatReference); // tạo ID cho đoạn chat
+            // lưu tin nhắn mới vào firebase
             set(messageID, {
                 userID: userID,
+                images: linkImages,
                 content: content
             });
         }
-
         // xóa nội dung trong ô chat
         sendMessage.content.value = "";
 
         // đóng bảng icon
         tooltip.classList.remove('shown');
+
+        // clear các ảnh đã chọn trong ô chat
+        upload.resetPreviewPanel();
     });
 }
 // hết gửi tin nhắn
 
-// chèn icon
+// chèn icon vào tin nhắn
 if(emjoiPicker && sendMessage) {
     emjoiPicker.addEventListener('emoji-click', event => {
         const icon = event.detail.unicode;
@@ -366,7 +406,7 @@ if(emjoiPicker && sendMessage) {
         
     });
 }
-// hết chèn icon
+// hết chèn icon vào tin nhắn
 
 // khi click ra ngoài bảng icon thì đóng bảng icon lại
 clickOutSideEvent(chatIcon, () => {
@@ -402,27 +442,51 @@ if(sendMessage && emjoiPicker) {
 // chèn tin nhắn mình gửi đi
 const messageOutGoingInsert = (element, props) => {
     element.setAttribute('class', 'chat__outgoing');
-    element.innerHTML = `
-        <div class="chat__outgoing-content">
-            ${props.content}
-            <div class="chat__outgoing-icon" option-chat>
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-                <ul class="chat__outgoing-option" message-optionList>
-                    <li message-id=${props.messageID}>
-                        <a href="javascript:;">Xóa</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">Chuyển tiếp</a>
-                    </li>
-                    <li>
-                        <a href="javascript:;">Ghim</a>
-                    </li>
-                </ul>
+
+    // đoạn html option chat (tức là lựa chọn xóa)
+    const htmlsOption = `
+        <div class="chat__outgoing-icon" option-chat>
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+            <ul class="chat__outgoing-option" message-optionList>
+                <li message-id="${props.messageID}">
+                    <a href="javascript:;">Xóa</a>
+                </li>
+                <li>
+                    <a href="javascript:;">Chuyển tiếp</a>
+                </li>
+                <li>
+                    <a href="javascript:;">Ghim</a>
+                </li>
+            </ul>
+        </div>
+    `;
+
+    // đoạn html content chat
+    let htmlsContent = '';
+    if(props.content) {
+        htmlsContent += `
+            <div class="chat__outgoing-content">
+                ${props.content}
             </div>
-        </div>
-        <div class="chat__outgoing-time">
-            09:25 AM
-        </div>
+        `;
+    }
+
+    // đoạn html hình ảnh gửi lên
+    let htmlsImages = '';
+
+    if(props.images && props.images.length > 0) {
+        htmlsImages += `<div class="images chat__outgoing-images">`
+        
+        for(const image of props.images) {
+            htmlsImages += `<img src="${image}"/>`
+        }
+        htmlsImages += `</div>`
+    }
+    
+    element.innerHTML = `
+        ${htmlsContent}
+        ${htmlsImages}
+        ${htmlsOption}
     `;
 
     element.setAttribute('delete-id', props.messageID); // ID của tin nhắn để xóa
@@ -435,34 +499,68 @@ const messageOutGoingInsert = (element, props) => {
 const messageInCommingInsert = (element, props) => {
     
     element.setAttribute('class', 'chat__incomming');
-    element.innerHTML = `
+
+    // đoạn html họ tên
+    const htmlsFullName = `
+        <div class="chat__incomming-userName">
+            ${props.fullName}
+        </div>
+    `;
+
+    // đoạn html option chat (tức là lựa chọn xóa)
+    const htmlsOption = `
+        <div class="chat__incomming-icon" option-chat>
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+            <ul class="chat__incomming-option" message-optionList>
+                <li message-id=${props.messageID}>
+                    <a href="javascript:;">Xóa</a>
+                </li>
+                <li>
+                    <a href="javascript:;">Chuyển tiếp</a>
+                </li>
+                <li>
+                    <a href="javascript:;">Ghim</a>
+                </li>
+            </ul>
+        </div>
+    `;
+
+    // đoạn html avatar user
+    const htmlsAvatar = `
         <div class="chat__incomming-avatar">
             <img src='https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books/blob/master/PHP/Original_by_Tkimz_Php_Programming_Book.png?raw=true' alt="user">
         </div>
-        <div class="chat__incomming-main">
-            <div class="chat__incomming-userName">
-                ${props.fullName}
-            </div>
+    `;
+
+    // đoạn html content
+    let htmlsContent = '';
+    if(props.content) {
+        htmlsContent += ` 
             <div class="chat__incomming-content">
                 ${props.content}
-                <div class="chat__incomming-icon" option-chat>
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                    <ul class="chat__incomming-option" message-optionList>
-                        <li message-id=${props.messageID}>
-                            <a href="javascript:;">Xóa</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">Chuyển tiếp</a>
-                        </li>
-                        <li>
-                            <a href="javascript:;">Ghim</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="chat__incomming-time">
-                    09:25 AM
-                </div>
+                ${htmlsOption}
             </div>
+        `
+    }
+
+    // đoạn html hiển thị hình ảnh
+    let htmlsImage = '';
+    if(props.images && props.images.length > 0 ) {
+        htmlsImage += `<div class="chat__incoming-images">`
+
+        for(const image of props.images) {
+            htmlsImage += `<img src="${image}"/>`;
+        } 
+
+        htmlsImage += `</div>`
+    }
+
+    element.innerHTML = `
+        ${htmlsAvatar}
+        <div class="chat__incomming-main">
+            ${htmlsFullName}
+            ${htmlsContent}
+            ${htmlsImage}
         </div>
     `;
 
@@ -530,6 +628,7 @@ const chatOptionEvent = (chatBody ,element) => {
 // vẽ tin nhắn ra giao diện: https://firebase.google.com/docs/database/web/lists-of-data (sử dụng onChildAdd để cập nhật những thay đổi)
 const chatBody = document.querySelector('.chat__body');
 if(chatBody) {
+
     // chỉ cập nhật những gì mới có trong database
     onChildAdded(chatReference, (data) => {
         const myID = currentUser.uid; // lấy ID của mình
@@ -539,14 +638,15 @@ if(chatBody) {
             messageID: data.key, // ID của tin nhắn
             userID: data.val().userID, // ID của chủ tin nhắn
             content: data.val().content, // nội dung tin nhắn
+            images: data.val().images,
         }
-
         
         // lấy tên của người gửi tin nhắn
         get(child(dbRef, `users/` + messsageObject.userID)).then(user => {
                 if(user.exists()) {
                     messsageObject.fullName = user.val().fullName;
                     messsageObject.avatar   = user.val().avatar;
+
                     // thẻ div bọc tin nhắn
                     let divChat = document.createElement('div');
 
@@ -568,6 +668,12 @@ if(chatBody) {
                     // scroll màn hình khi tin nhắn tràn (lưu ý khi append thì mới srcoll xuống)
                     chatBody.scrollTop = chatBody.scrollHeight;
                     // hết scroll màn hình khi tin nhắn tràn
+
+                    // ViewerJs - Zoom hình ảnh. Lưu ý vì mỗi tin nhắn có ảnh cứ có mới load lên nên nếu để bên ngoài sẽ đọc không được nho
+                    const gallery = new Viewer(divChat);
+                    
+                    // Hết ViewerJs - Zoom hình ảnh
+
                 }
             });
 
